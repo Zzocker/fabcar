@@ -1,0 +1,41 @@
+Organizations:
+    - &OrdererOrg
+        Name: Orderer
+        ID: OrdererMSP
+        MSPDir: ./crypto-config/ordererOrganizations/orderer.com/msp
+    - &Org1
+        Name: Org1
+        ID: Org1MSP
+        MSPDir: ./crypto-config/peerOrganizations/org1.com/msp
+Application: &ApplicationDefaults
+    Organizations:
+Orderer: &OrdererDefaults
+        OrdererType: solo
+        Addresses:
+            - orderer:7050
+        BatchTimeout: 2s
+        BatchSize:
+            MaxMessageCount: 10
+            AbsoluteMaxBytes: 99 MB
+            PreferredMaxBytes: 512 KB
+        Organizations:
+Profiles:
+    Genesis:
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            Dev:
+                Organizations:
+                    - *Org1
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+    DevChannel:
+        Consortium: Dev
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
