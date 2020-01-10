@@ -5,4 +5,5 @@
 3. configtxgen -profile Genesis -outputBlock ./channel-artifacts/genesis.block -channelID dev 
 4. configtxgen -profile DevChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID devchannel
 5. configtxgen -profile DevChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1AnchorUpdate.tx -channelID devchannel -asOrg Org1
+6. change *-cert.pem and *_sk from peerOrg/ca folder to cert.pem and PRIVATE_KEY respectively
 
