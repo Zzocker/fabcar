@@ -50,6 +50,7 @@ services:
             - ./crypto-config:/crypto-config
             - ./channel-artifacts:/channel-artifacts
             - /var/run/:/host/var/run/
+            - ../chaincode:/opt/gopath/src/chaincode
         networks: 
             - dev
     orderer:
