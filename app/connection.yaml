@@ -1,0 +1,30 @@
+name: 'dev-network'
+description: "dev network connection profile"
+
+version: "1.0"
+organizations:
+    Org1:
+        mspid: Org1MSP
+        peers:
+            - devpeer
+        certificateAuthorities:
+            - devca
+channels:
+    devchannel:
+        orderers:
+        - orderer
+        peers:
+            devpeer:
+                endorsingPeer: true
+                chaincodeQuery: true
+                ledgerQuery: true
+                eventSource: true
+orderer:
+    orderer:
+        url: http://localhost:7050
+peers:
+    devpeer:
+        url: http://localhost:7051
+certificateAuthorities:
+    devca:
+        url: http://localhost:7054
