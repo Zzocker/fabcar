@@ -29,6 +29,8 @@ services:
             - couchdb
         networks: 
             - dev
+        ports: 
+            - 7051:7051
     cli:
         container_name: cli
         image: hyperledger/fabric-tools:latest
@@ -53,6 +55,7 @@ services:
             - ../chaincode:/opt/gopath/src/chaincode
         networks: 
             - dev
+
     orderer:
         container_name: orderer
         extends: 

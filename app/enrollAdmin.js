@@ -3,11 +3,11 @@ const yaml = require('js-yaml')
 const FabricCAServices = require('fabric-ca-client')
 const { FileSystemWallet, X509WalletMixin } = require('fabric-network')
 const CONNECTION_PROFILE_PATH='./connection.yaml'
-const cpp = yaml.safeLoadAll(fs.readFileSync(CONNECTION_PROFILE_PATH))
+const cpp = yaml.safeLoad(fs.readFileSync(CONNECTION_PROFILE_PATH))
 const WALLET_PATH='./wallet'
 async function main(){
     try {
-        const caInfo = cpp[0].certificateAuthorities['devca']
+        const caInfo = cpp.certificateAuthorities['devca']
         console.log(caInfo)
         const ca = new FabricCAServices(caInfo.url)
         const wallet = new FileSystemWallet(WALLET_PATH)
@@ -25,4 +25,4 @@ async function main(){
         process.exit(1)
     }
 }
-main()
+// main()

@@ -17,6 +17,7 @@ services:
         volumes: 
             - /var/run/:/host/var/run/
         command: peer node start
+        #command: peer node start --peer-chaincodedev
     orderer-base:
         image: hyperledger/fabric-orderer:latest
         environment:
