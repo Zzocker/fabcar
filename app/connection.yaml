@@ -14,19 +14,21 @@ organizations:
 channels:
     devchannel:
         orderers:
-        - orderer
+            - orderer
         peers:
             devpeer:
                 endorsingPeer: true
                 chaincodeQuery: true
                 ledgerQuery: true
                 eventSource: true
-orderer:
+chaincodes:
+    - fabcar
+orderers:
     orderer:
-        url: http://localhost:7050
+        url: grpc://localhost:7050
 peers:
     devpeer:
-        url: grpc://127.0.0.1:7051
+        url: grpc://0.0.0.0:7051
 certificateAuthorities:
     devca:
         url: http://localhost:7054
