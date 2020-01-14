@@ -17,7 +17,8 @@ async function main(){
     const network = await gateway.getNetwork('devchannel')
     // console.log(network.getContract('fabcar').network.channel._anchor_peers)
     const contract = network.getContract('fabcar')
-    response = await contract.submitTransaction("addCar","10","BMW","TW","Red","Pritam",)
+    return await contract
+    response = await contract.submitTransaction("addCar","CAR11","BMW","T9","Red","Pritam")
     // console.log(response.toString())
     await gateway.disconnect()
     } catch (error) {
@@ -25,4 +26,3 @@ async function main(){
         process.exit(1)
     }
 }
-main()

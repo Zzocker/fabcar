@@ -29,16 +29,16 @@ func (c *SmartContract) Init(stub shim.ChaincodeStubInterface) peer.Response {
 	}
 }
 func (c *SmartContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
-	funcName , args := stub.GetFunctionAndParameters()
-	switch (funcName){
+	funcName, args := stub.GetFunctionAndParameters()
+	switch funcName {
 	case "initLedger":
 		return initLedger(stub)
 	case "queryAllCar":
 		return queryAllCar(stub)
 	case "addCar":
-		return addCar(stub,args)
+		return addCar(stub, args)
 	case "queryCar":
-		return queryCar(stub,args)
+		return queryCar(stub, args)
 	}
 
 	return peer.Response{
@@ -46,42 +46,42 @@ func (c *SmartContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		Message: "Chaincode init",
 	}
 }
-func addCar(stub shim.ChaincodeStubInterface,args []string) peer.Response{
-	if len(args)!=5{
+func addCar(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 5 {
 		return shim.Error("required 5 arguments")
 	}
-	carNo:= args[0]
+	carNo := args[0]
 	car := Car{
-		Make: args[1],
-		Model: args[2],
+		Make:   args[1],
+		Model:  args[2],
 		Colour: args[3],
-		Owner: args[4],
+		Owner:  args[4],
 	}
-	carByte,_:= json.Marshal(car)
-	stub.PutState(carNo,carByte)
+	carByte, _ := json.Marshal(car)
+	stub.PutState("CAR"+carNo, carByte)
 	return shim.Success(nil)
 }
-func queryCar(stub shim.ChaincodeStubInterface,args []string) peer.Response{
-	if len(args)!=1{
+func queryCar(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 1 {
 		return shim.Error("Please Provide Car Number")
 	}
-	carByte,err:= stub.GetState("CAR"+args[0])
-	if err!=nil{
+	carByte, err := stub.GetState("CAR" + args[0])
+	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if len(carByte)==0{
-		return shim.Error("Car Number "+"args[0]"+" doesn't exists")
+	if len(carByte) == 0 {
+		return shim.Error("Car Number " + args[0] + " doesn't exists")
 	}
-	car:= new(Car)
-	json.Unmarshal(carByte,car)
+	car := new(Car)
+	json.Unmarshal(carByte, car)
 	result := QueryResult{
-		Key: args[0],
+		Key:    args[0],
 		Record: car,
 	}
-	resultJSON,_:= json.Marshal(result)
+	resultJSON, _ := json.Marshal(result)
 	return shim.Success(resultJSON)
 }
-func initLedger(stub shim.ChaincodeStubInterface) peer.Response{
+func initLedger(stub shim.ChaincodeStubInterface) peer.Response {
 	cars := []Car{
 		Car{Make: "Toyota", Model: "Prius", Colour: "blue", Owner: "Tomoko"},
 		Car{Make: "Ford", Model: "Mustang", Colour: "red", Owner: "Brad"},
@@ -94,33 +94,33 @@ func initLedger(stub shim.ChaincodeStubInterface) peer.Response{
 		Car{Make: "Tata", Model: "Nano", Colour: "indigo", Owner: "Valeria"},
 		Car{Make: "Holden", Model: "Barina", Colour: "brown", Owner: "Shotaro"},
 	}
-	for i, car:= range cars{
-		carByte,_:= json.Marshal(car)
-		stub.PutState("CAR"+strconv.Itoa(i),carByte)
+	for i, car := range cars {
+		carByte, _ := json.Marshal(car)
+		stub.PutState("CAR"+strconv.Itoa(i), carByte)
 	}
 	return shim.Success(nil)
 }
-func queryAllCar(stub shim.ChaincodeStubInterface) peer.Response{
+func queryAllCar(stub shim.ChaincodeStubInterface) peer.Response {
 	startKey := "CAR0"
-	endKey:= "CAR99"
-	result:= []QueryResult{}
-	resultIterator,err:= stub.GetStateByRange(startKey,endKey)
-	if err!=nil{
+	endKey := "CAR99"
+	result := []QueryResult{}
+	resultIterator, err := stub.GetStateByRange(startKey, endKey)
+	if err != nil {
 		return shim.Error(err.Error())
 	}
 	defer resultIterator.Close()
-	for resultIterator.HasNext(){
-		car:=new(Car)
-		queryResponse,err:= resultIterator.Next()
-		if err!=nil{
+	for resultIterator.HasNext() {
+		car := new(Car)
+		queryResponse, err := resultIterator.Next()
+		if err != nil {
 			return shim.Error(err.Error())
 		}
-		json.Unmarshal(queryResponse.GetValue(),car)
-		queryres:= QueryResult{queryResponse.GetKey(),car}
-		result= append(result,queryres)
+		json.Unmarshal(queryResponse.GetValue(), car)
+		queryres := QueryResult{queryResponse.GetKey(), car}
+		result = append(result, queryres)
 	}
-	resultByte,_:= json.Marshal(result)
-	return shim.Success(resultByte) 
+	resultByte, _ := json.Marshal(result)
+	return shim.Success(resultByte)
 }
 
 func main() {

@@ -13,12 +13,13 @@ const main = async (isQuery,funcName,args)=>{
             return
         }
         const gateawy = new Gateway()
-        await gateawy.connect(cpp,{wallet:wallet,identity:'user1',discovery: { enabled: true, asLocalhost: true }})
+        await gateawy.connect(cpp,{wallet:wallet,identity:'user1',discovery: { enabled: false, asLocalhost: true }})
         const network = await gateawy.getNetwork('devchannel')
-        const contract = await network.getContract('fabcar')
-        var response
+        let contract =  network.getContract('fabcar')
+        return await contract
+        // var response
         // const response = await contract.evaluateTransaction('queryCar','1')
-        response = await contract.evaluateTransaction('queryCar',"1")
+        // response = await contract.evaluateTransaction('queryAllCar')
         // if (isQuery){
         //     switch (funcName){
         //         case ("queryAllCar") : 
@@ -29,20 +30,39 @@ const main = async (isQuery,funcName,args)=>{
         //             if (args){response = await contract.evaluateTransaction('queryCar',args[0])}
         //             else {response="To query a car, provide number of car"}
         //             break
+        //         default:
+        //             response = "No function found"
+        //             process.exit()   
                 
         //     }
         // }
         // else{
         //     switch (funcName){
-        //         case ("addCar"):{
-        //             response = await contract.submitTransaction("addCar",args)
-        //         }
+        //         case ("addCar"):
+        //             response = await contract.submitTransaction("addCar",`CAR${args[0]}`,args[1],args[2],args[3],args[4])
+        //             break
+        //         case ("initLedger"):
+        //             response = await contract.submitTransaction("initLedger")
+        //             break
+        //         default:
+        //             response = "No function found"
+        //             process.exit()
         //     }
         // }
-        console.log(response.toString())
+        await gateawy.disconnect()
+        return response.toString()
     } catch (error) {
         console.log(error)
     }
 }
-main(true,'queryAllCar',["10"])
-// main(false,"addCar",["523","BMW","TW","Pritam"].toString())
+// main(false,'addCar',"25","LO",)
+// main(false,"addCar",["52","BMW","TW","Red","Pritam"])
+// main(true,'queryAllCar')
+// console.log(main(true,'queryCar',["11"]))
+
+function queryAllCar(){
+    let contract = main()
+    response =  contract.evaluateTransaction('queryAllCar')
+    console.log(response.toString())
+}
+queryAllCar()
