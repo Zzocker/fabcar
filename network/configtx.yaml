@@ -7,6 +7,9 @@ Organizations:
         Name: Org1
         ID: Org1MSP
         MSPDir: ./crypto-config/peerOrganizations/org1.com/msp
+        AnchorPeers:
+            - Host: devpeer
+              Port: 7051
 Application: &ApplicationDefaults
     Organizations:
 Orderer: &OrdererDefaults
